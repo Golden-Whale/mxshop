@@ -53,7 +53,7 @@ def serve():
     signal.signal(signal.SIGTERM, on_exit)
 
     print(f"启动服务: {args.ip}:{args.port}")
-    # server.start()
+    server.start()
     server.wait_for_termination()
 
 

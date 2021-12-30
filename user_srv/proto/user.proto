@@ -6,7 +6,7 @@ import "google/protobuf/empty.proto";
 service User {
   rpc GetUserList(PageInfo) returns (UserListResponse);           // 查询用户列表
   rpc GetUserByMobile(MobileReqeust) returns (UserInfoResponse);  // 通过手机号查询用户
-  rpc GetUserById(IdReqeust) returns (UserInfoResponse);          // 通过用户ID查询手机号
+  rpc GetUserById(IdReqeust) returns (UserInfoResponse);          // 通过用户ID查询用户
   rpc CreateUser(CreateUserInfo) returns (UserInfoResponse);      // 添加用户
   rpc UpdateUser(UpdateUserInfo) returns (google.protobuf.Empty); // 更新用户
 }
