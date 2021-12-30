@@ -1,6 +1,7 @@
 import time
 
 import grpc
+from loguru import logger
 
 from user_srv.model.model import User
 from user_srv.proto import user_pb2, user_pb2_grpc
@@ -8,6 +9,7 @@ from user_srv.proto import user_pb2, user_pb2_grpc
 
 class UserServices(user_pb2_grpc.UserServicer):
     # 获取用户列表
+    @logger.catch()
     def GetUserList(self, request: user_pb2.PageInfo, context):
         rsp = user_pb2.UserListResponse()
         users = User.select()
