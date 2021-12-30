@@ -2,14 +2,15 @@ import time
 
 import grpc
 from loguru import logger
+from passlib.handlers.pbkdf2 import pbkdf2_sha256
 
 from user_srv.model.model import User
 from user_srv.proto import user_pb2, user_pb2_grpc
 
 
 class UserServices(user_pb2_grpc.UserServicer):
-
-    def convert_user_to_rsp(self, user):
+    @staticmethod
+    def convert_user_to_rsp(user) -> user_pb2.UserInfoResponse:
         # 将user的model对象转换成message对象
         user_info_rsp = user_pb2.UserInfoResponse()
         user_info_rsp.id = user.id
@@ -70,3 +71,31 @@ class UserServices(user_pb2_grpc.UserServicer):
             context.set_code(grpc.StatusCode.NOT_FOUND)
             context.set_details("用户不存在")
             return user_pb2.UserInfoResponse()
+
+    @logger.catch()
+    def CreateUser(self, request, context):
+        # 新建用户
+
+        # 获取参数
+        nick_name = request.nickName
+        password = request.password
+        mobile = request.mobile
+
+        # 检验参数
+        try:
+            User.get(User.mobile == mobile)
+            context.set_code(grpc.StatusCode.NOT_FOUND)
+            context.set_details("手机号码已存在")
+            return user_pb2.UserInfoResponse()
+        except User.DoesNotExist:
+            pass
+
+        # 操作逻辑
+        user = User()
+        user.nick_name = nick_name
+        user.mobile = mobile
+        user.password = pbkdf2_sha256.hash(password)
+        user.save()
+
+        # 返回响应
+        return self.convert_user_to_rsp(user)

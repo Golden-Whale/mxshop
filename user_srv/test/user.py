@@ -18,8 +18,17 @@ class UserTest:
         rsp = self.stub.GetUserById(user_pb2.IdReqeust(ID=id))
         print(rsp.mobile, rsp.birthDay)
 
+    def create_uesr(self, nick_name, password, mobile):
+        rsp: user_pb2.UserInfoResponse = self.stub.CreateUser(user_pb2.CreateUserInfo(
+            nickName=nick_name,
+            password=password,
+            mobile=mobile
+        ))
+        print(rsp.id)
+
 
 if __name__ == '__main__':
     user = UserTest()
     # user.user_list()
-    user.user_id(11)
+    # user.user_id(11)
+    user.create_uesr("booby", "18787878787", "admin1234")
