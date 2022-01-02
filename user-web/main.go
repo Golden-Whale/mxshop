@@ -12,6 +12,10 @@ func main() {
 	initialize.InitLogger()
 	// 2. 初始化配置文件
 	initialize.InitConfig()
+	// 3. 初始化验证器翻译
+	if err := initialize.InitTrans("zh"); err != nil {
+		zap.S().Error("初始化验证器错误", err.Error())
+	}
 
 	// 2. 初始化routers
 	router := initialize.Routers()

@@ -4,17 +4,29 @@ import (
 	"context"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"github.com/go-playground/validator/v10"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	"mxshop-api/user-web/forms"
 	"mxshop-api/user-web/global"
 	"mxshop-api/user-web/global/response"
 	"mxshop-api/user-web/proto"
 	"net/http"
 	"strconv"
+	"strings"
 	"time"
 )
+
+// RemoveTopStruct 剔除errs前缀
+func RemoveTopStruct(errs map[string]string) map[string]string {
+	newErrors := make(map[string]string, 0)
+	for key, val := range errs {
+		newErrors[key[strings.Index(key, ".")+1:]] = val
+	}
+	return newErrors
+}
 
 func HandelGrpcErrorToHttp(err error, c *gin.Context) {
 	// 将grpc的code转换成Http的状态码
@@ -42,6 +54,18 @@ func HandelGrpcErrorToHttp(err error, c *gin.Context) {
 			}
 		}
 	}
+}
+
+func HandelValidatorError(ctx *gin.Context, err error) {
+	errs, ok := err.(validator.ValidationErrors)
+	if !ok {
+		ctx.JSON(http.StatusOK, gin.H{
+			"msg": err.Error(),
+		})
+	}
+	ctx.JSON(http.StatusBadRequest, gin.H{
+		"error": RemoveTopStruct(errs.Translate(global.Trans)),
+	})
 }
 
 func GetUserList(ctx *gin.Context) {
@@ -87,4 +111,13 @@ func GetUserList(ctx *gin.Context) {
 	}
 	ctx.JSON(http.StatusOK, result)
 	return
+}
+
+func PasswordLogin(ctx *gin.Context) {
+	// 表单验证
+	passwordForm := forms.PasswordLoginForm{}
+	if err := ctx.ShouldBind(&passwordForm); err != nil {
+		HandelValidatorError(ctx, err)
+		return
+	}
 }
