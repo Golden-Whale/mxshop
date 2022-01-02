@@ -8,9 +8,11 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	"mxshop-api/user-web/global"
 	"mxshop-api/user-web/global/response"
 	"mxshop-api/user-web/proto"
 	"net/http"
+	"strconv"
 	"time"
 )
 
@@ -44,8 +46,16 @@ func HandelGrpcErrorToHttp(err error, c *gin.Context) {
 
 func GetUserList(ctx *gin.Context) {
 	zap.S().Debug("获取用户列表页")
+
+	// 获取参数
+	pn := ctx.DefaultQuery("pn", "1")
+	pnInt, _ := strconv.Atoi(pn)
+
+	pSize := ctx.DefaultQuery("psize", "1")
+	pSizeInt, _ := strconv.Atoi(pSize)
+
 	// 拨号连接用户grpc服务器
-	userConn, err := grpc.Dial(fmt.Sprintf("%s:%d", "127.0.0.1", 50051), grpc.WithInsecure())
+	userConn, err := grpc.Dial(fmt.Sprintf("%s:%d", global.ServerConfig.UserSrvInfo.Host, global.ServerConfig.UserSrvInfo.Port), grpc.WithInsecure())
 	if err != nil {
 		zap.S().Errorw("[GetUserList] 连接 【用户服务失败】",
 			"msg", err.Error(),
@@ -55,8 +65,8 @@ func GetUserList(ctx *gin.Context) {
 	userSrvClient := proto.NewUserClient(userConn)
 
 	rsp, err := userSrvClient.GetUserList(context.Background(), &proto.PageInfo{
-		Pn:    1,
-		PSize: 10,
+		Pn:    uint32(pnInt),
+		PSize: uint32(pSizeInt),
 	})
 	if err != nil {
 		zap.S().Errorw("[GetUserList] 查询 【用户列表】失败")

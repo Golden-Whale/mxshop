@@ -18,9 +18,9 @@ func InitConfig() {
 	configFilePrefix := "config"
 	configFileName := fmt.Sprintf("user-web/%s-pron.yaml", configFilePrefix)
 	if debug == 1 {
-		configFileName = fmt.Sprintf("user-web/%s-deubg-work.yaml", configFilePrefix)
+		configFileName = fmt.Sprintf("user-web/%s-debug-work.yaml", configFilePrefix)
 	} else if debug == 2 {
-		configFileName = fmt.Sprintf("user-web/%s-deubg-home.yaml", configFilePrefix)
+		configFileName = fmt.Sprintf("user-web/%s-debug-home.yaml", configFilePrefix)
 	}
 
 	v := viper.New()
