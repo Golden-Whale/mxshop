@@ -20,7 +20,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=b'Z\010./;proto',
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\nuser.proto\x1a\x1bgoogle/protobuf/empty.proto\"%\n\x08PageInfo\x12\n\n\x02pn\x18\x01 \x01(\r\x12\r\n\x05pSize\x18\x02 \x01(\r\"\x1f\n\rMobileReqeust\x12\x0e\n\x06mobile\x18\x01 \x01(\t\"\x17\n\tIdReqeust\x12\n\n\x02ID\x18\x01 \x01(\r\"D\n\x0e\x43reateUserInfo\x12\x10\n\x08nickName\x18\x01 \x01(\t\x12\x10\n\x08password\x18\x02 \x01(\t\x12\x0e\n\x06mobile\x18\x03 \x01(\t\"P\n\x0eUpdateUserInfo\x12\n\n\x02Id\x18\x01 \x01(\x05\x12\x10\n\x08nickName\x18\x02 \x01(\t\x12\x0e\n\x06gender\x18\x03 \x01(\t\x12\x10\n\x08\x62irthday\x18\x04 \x01(\x04\"\x82\x01\n\x10UserInfoResponse\x12\n\n\x02id\x18\x01 \x01(\x05\x12\x10\n\x08password\x18\x02 \x01(\t\x12\x0e\n\x06mobile\x18\x03 \x01(\t\x12\x10\n\x08nickName\x18\x04 \x01(\t\x12\x10\n\x08\x62irthDay\x18\x05 \x01(\x04\x12\x0e\n\x06gender\x18\x06 \x01(\t\x12\x0c\n\x04role\x18\x07 \x01(\x05\"B\n\x10UserListResponse\x12\r\n\x05total\x18\x01 \x01(\x05\x12\x1f\n\x04\x64\x61ta\x18\x02 \x03(\x0b\x32\x11.UserInfoResponse2\x80\x02\n\x04User\x12+\n\x0bGetUserList\x12\t.PageInfo\x1a\x11.UserListResponse\x12\x34\n\x0fGetUserByMobile\x12\x0e.MobileReqeust\x1a\x11.UserInfoResponse\x12,\n\x0bGetUserById\x12\n.IdReqeust\x1a\x11.UserInfoResponse\x12\x30\n\nCreateUser\x12\x0f.CreateUserInfo\x1a\x11.UserInfoResponse\x12\x35\n\nUpdateUser\x12\x0f.UpdateUserInfo\x1a\x16.google.protobuf.EmptyB\nZ\x08./;protob\x06proto3'
+  serialized_pb=b'\n\nuser.proto\x1a\x1bgoogle/protobuf/empty.proto\"%\n\x08PageInfo\x12\n\n\x02pn\x18\x01 \x01(\r\x12\r\n\x05pSize\x18\x02 \x01(\r\"\x1f\n\rMobileReqeust\x12\x0e\n\x06mobile\x18\x01 \x01(\t\"\x17\n\tIdReqeust\x12\n\n\x02ID\x18\x01 \x01(\r\"D\n\x0e\x43reateUserInfo\x12\x10\n\x08nickName\x18\x01 \x01(\t\x12\x10\n\x08password\x18\x02 \x01(\t\x12\x0e\n\x06mobile\x18\x03 \x01(\t\"P\n\x0eUpdateUserInfo\x12\n\n\x02Id\x18\x01 \x01(\x05\x12\x10\n\x08nickName\x18\x02 \x01(\t\x12\x0e\n\x06gender\x18\x03 \x01(\t\x12\x10\n\x08\x62irthday\x18\x04 \x01(\x04\"@\n\x11PasswordCheckInfo\x12\x10\n\x08password\x18\x01 \x01(\t\x12\x19\n\x11\x65ncryptedPassword\x18\x02 \x01(\t\"\x82\x01\n\x10UserInfoResponse\x12\n\n\x02id\x18\x01 \x01(\x05\x12\x10\n\x08password\x18\x02 \x01(\t\x12\x0e\n\x06mobile\x18\x03 \x01(\t\x12\x10\n\x08nickName\x18\x04 \x01(\t\x12\x10\n\x08\x62irthDay\x18\x05 \x01(\x04\x12\x0e\n\x06gender\x18\x06 \x01(\t\x12\x0c\n\x04role\x18\x07 \x01(\x05\"B\n\x10UserListResponse\x12\r\n\x05total\x18\x01 \x01(\x05\x12\x1f\n\x04\x64\x61ta\x18\x02 \x03(\x0b\x32\x11.UserInfoResponse\" \n\rCheckResponse\x12\x0f\n\x07success\x18\x01 \x01(\x08\x32\xb5\x02\n\x04User\x12+\n\x0bGetUserList\x12\t.PageInfo\x1a\x11.UserListResponse\x12\x34\n\x0fGetUserByMobile\x12\x0e.MobileReqeust\x1a\x11.UserInfoResponse\x12,\n\x0bGetUserById\x12\n.IdReqeust\x1a\x11.UserInfoResponse\x12\x30\n\nCreateUser\x12\x0f.CreateUserInfo\x1a\x11.UserInfoResponse\x12\x35\n\nUpdateUser\x12\x0f.UpdateUserInfo\x1a\x16.google.protobuf.Empty\x12\x33\n\rCheckPassword\x12\x12.PasswordCheckInfo\x1a\x0e.CheckResponseB\nZ\x08./;protob\x06proto3'
   ,
   dependencies=[google_dot_protobuf_dot_empty__pb2.DESCRIPTOR,])
 
@@ -229,6 +229,45 @@ _UPDATEUSERINFO = _descriptor.Descriptor(
 )
 
 
+_PASSWORDCHECKINFO = _descriptor.Descriptor(
+  name='PasswordCheckInfo',
+  full_name='PasswordCheckInfo',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='password', full_name='PasswordCheckInfo.password', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='encryptedPassword', full_name='PasswordCheckInfo.encryptedPassword', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=292,
+  serialized_end=356,
+)
+
+
 _USERINFORESPONSE = _descriptor.Descriptor(
   name='UserInfoResponse',
   full_name='UserInfoResponse',
@@ -298,8 +337,8 @@ _USERINFORESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=293,
-  serialized_end=423,
+  serialized_start=359,
+  serialized_end=489,
 )
 
 
@@ -337,8 +376,40 @@ _USERLISTRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=425,
-  serialized_end=491,
+  serialized_start=491,
+  serialized_end=557,
+)
+
+
+_CHECKRESPONSE = _descriptor.Descriptor(
+  name='CheckResponse',
+  full_name='CheckResponse',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='success', full_name='CheckResponse.success', index=0,
+      number=1, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=559,
+  serialized_end=591,
 )
 
 _USERLISTRESPONSE.fields_by_name['data'].message_type = _USERINFORESPONSE
@@ -347,8 +418,10 @@ DESCRIPTOR.message_types_by_name['MobileReqeust'] = _MOBILEREQEUST
 DESCRIPTOR.message_types_by_name['IdReqeust'] = _IDREQEUST
 DESCRIPTOR.message_types_by_name['CreateUserInfo'] = _CREATEUSERINFO
 DESCRIPTOR.message_types_by_name['UpdateUserInfo'] = _UPDATEUSERINFO
+DESCRIPTOR.message_types_by_name['PasswordCheckInfo'] = _PASSWORDCHECKINFO
 DESCRIPTOR.message_types_by_name['UserInfoResponse'] = _USERINFORESPONSE
 DESCRIPTOR.message_types_by_name['UserListResponse'] = _USERLISTRESPONSE
+DESCRIPTOR.message_types_by_name['CheckResponse'] = _CHECKRESPONSE
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 PageInfo = _reflection.GeneratedProtocolMessageType('PageInfo', (_message.Message,), {
@@ -386,6 +459,13 @@ UpdateUserInfo = _reflection.GeneratedProtocolMessageType('UpdateUserInfo', (_me
   })
 _sym_db.RegisterMessage(UpdateUserInfo)
 
+PasswordCheckInfo = _reflection.GeneratedProtocolMessageType('PasswordCheckInfo', (_message.Message,), {
+  'DESCRIPTOR' : _PASSWORDCHECKINFO,
+  '__module__' : 'user_pb2'
+  # @@protoc_insertion_point(class_scope:PasswordCheckInfo)
+  })
+_sym_db.RegisterMessage(PasswordCheckInfo)
+
 UserInfoResponse = _reflection.GeneratedProtocolMessageType('UserInfoResponse', (_message.Message,), {
   'DESCRIPTOR' : _USERINFORESPONSE,
   '__module__' : 'user_pb2'
@@ -400,6 +480,13 @@ UserListResponse = _reflection.GeneratedProtocolMessageType('UserListResponse', 
   })
 _sym_db.RegisterMessage(UserListResponse)
 
+CheckResponse = _reflection.GeneratedProtocolMessageType('CheckResponse', (_message.Message,), {
+  'DESCRIPTOR' : _CHECKRESPONSE,
+  '__module__' : 'user_pb2'
+  # @@protoc_insertion_point(class_scope:CheckResponse)
+  })
+_sym_db.RegisterMessage(CheckResponse)
+
 
 DESCRIPTOR._options = None
 
@@ -410,8 +497,8 @@ _USER = _descriptor.ServiceDescriptor(
   index=0,
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_start=494,
-  serialized_end=750,
+  serialized_start=594,
+  serialized_end=903,
   methods=[
   _descriptor.MethodDescriptor(
     name='GetUserList',
@@ -460,6 +547,16 @@ _USER = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_UPDATEUSERINFO,
     output_type=google_dot_protobuf_dot_empty__pb2._EMPTY,
+    serialized_options=None,
+    create_key=_descriptor._internal_create_key,
+  ),
+  _descriptor.MethodDescriptor(
+    name='CheckPassword',
+    full_name='User.CheckPassword',
+    index=5,
+    containing_service=None,
+    input_type=_PASSWORDCHECKINFO,
+    output_type=_CHECKRESPONSE,
     serialized_options=None,
     create_key=_descriptor._internal_create_key,
   ),

@@ -61,9 +61,9 @@ class UserServices(user_pb2_grpc.UserServicer):
             return user_pb2.UserInfoResponse()
 
     @logger.catch()
-    def GetUserById(self, request, context):
+    def GetUserByMobile(self, request, context):
         # 通过mobile查询用户
-        mobile = request.ID
+        mobile = request.mobile
         try:
             user = User.get(User.mobile == mobile)
             return self.convert_user_to_rsp(user)
@@ -99,3 +99,12 @@ class UserServices(user_pb2_grpc.UserServicer):
 
         # 返回响应
         return self.convert_user_to_rsp(user)
+
+    @logger.catch()
+    def CheckPassword(self, request, context):
+        # 检查密码
+
+        if pbkdf2_sha256.verify(request.password, request.encryptedPassword):
+            return user_pb2.CheckResponse(success=True)
+        else:
+            return user_pb2.CheckResponse(success=False)
