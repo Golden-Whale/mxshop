@@ -3,6 +3,7 @@ package api
 import (
 	"context"
 	"fmt"
+	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
 	"go.uber.org/zap"
@@ -12,6 +13,8 @@ import (
 	"mxshop-api/user-web/forms"
 	"mxshop-api/user-web/global"
 	"mxshop-api/user-web/global/response"
+	"mxshop-api/user-web/middlewares"
+	"mxshop-api/user-web/models"
 	"mxshop-api/user-web/proto"
 	"net/http"
 	"strconv"
@@ -149,7 +152,31 @@ func PasswordLogin(ctx *gin.Context) {
 		return
 	}
 	if passwordSame.Success {
-		ctx.JSON(http.StatusOK, gin.H{"code": 200, "data": nil, "msg": "登录成功"})
+		// 生成token
+		j := middlewares.NewJWT()
+		claims := models.CustomClaims{
+			ID:          uint(rsp.Id),
+			NickName:    rsp.NickName,
+			AuthorityId: uint(rsp.Role),
+			StandardClaims: jwt.StandardClaims{
+				NotBefore: time.Now().Unix(), // 签名的生效时间
+				ExpiresAt: time.Now().Add(time.Hour * 24 * 30).Unix(),
+				Issuer:    "mxShop",
+			},
+		}
+		token, err := j.CreateToken(claims)
+		if err != nil {
+			ctx.JSON(http.StatusInternalServerError, gin.H{
+				"msg": "生成token失败",
+			})
+		}
+		ctx.JSON(http.StatusOK, gin.H{"code": 200, "data": gin.H{
+			"token":      token,
+			"id":         rsp.Id,
+			"nick_name":  rsp.NickName,
+			"expired_at": claims.ExpiresAt,
+		},
+			"msg": "登录成功"})
 	} else {
 		ctx.JSON(http.StatusUnprocessableEntity, gin.H{"code": 422, "data": nil, "msg": "用户名或密码错误"})
 	}
