@@ -120,4 +120,37 @@ func PasswordLogin(ctx *gin.Context) {
 		HandelValidatorError(ctx, err)
 		return
 	}
+
+	// 拨号连接用户grpc服务器
+	userConn, err := grpc.Dial(fmt.Sprintf("%s:%d", global.ServerConfig.UserSrvInfo.Host, global.ServerConfig.UserSrvInfo.Port), grpc.WithInsecure())
+	if err != nil {
+		zap.S().Errorw("[GetUserList] 连接 【用户服务失败】",
+			"msg", err.Error(),
+		)
+	}
+	// 调用接口
+	userSrvClient := proto.NewUserClient(userConn)
+
+	// 通过手机号码获取用户
+	rsp, err := userSrvClient.GetUserByMobile(context.Background(), &proto.MobileReqeust{Mobile: passwordForm.Mobile})
+	if err != nil {
+		zap.S().Errorw("[GetUserList] 查询 【用户手机号】失败")
+		HandelGrpcErrorToHttp(err, ctx)
+		return
+	}
+
+	passwordSame, err := userSrvClient.CheckPassword(context.Background(), &proto.PasswordCheckInfo{
+		Password:          passwordForm.Password,
+		EncryptedPassword: rsp.Password,
+	})
+	if err != nil {
+		zap.S().Errorw("[GetUserList] 查询 【验证密码】失败")
+		HandelGrpcErrorToHttp(err, ctx)
+		return
+	}
+	if passwordSame.Success {
+		ctx.JSON(http.StatusOK, gin.H{"code": 200, "data": nil, "msg": "登录成功"})
+	} else {
+		ctx.JSON(http.StatusUnprocessableEntity, gin.H{"code": 422, "data": nil, "msg": "用户名或密码错误"})
+	}
 }

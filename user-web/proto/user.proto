@@ -9,6 +9,7 @@ service User {
   rpc GetUserById(IdReqeust) returns (UserInfoResponse);          // 通过用户ID查询用户
   rpc CreateUser(CreateUserInfo) returns (UserInfoResponse);      // 添加用户
   rpc UpdateUser(UpdateUserInfo) returns (google.protobuf.Empty); // 更新用户
+  rpc CheckPassword(PasswordCheckInfo) returns (CheckResponse);   // 检查密码
 }
 
 message PageInfo {
@@ -33,6 +34,10 @@ message UpdateUserInfo {
   string gender = 3;
   uint64 birthday = 4;
 }
+message PasswordCheckInfo{
+  string password = 1;
+  string encryptedPassword = 2;
+}
 
 
 message UserInfoResponse {
@@ -49,3 +54,8 @@ message UserListResponse {
   int32 total = 1;
   repeated UserInfoResponse data = 2;
 }
+
+message CheckResponse{
+  bool success = 1;
+}
+
