@@ -126,7 +126,12 @@ func PasswordLogin(ctx *gin.Context) {
 		HandelValidatorError(ctx, err)
 		return
 	}
-
+	if !store.Verify(passwordForm.CaptchaId, passwordForm.Captcha, true) {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"captcha": "验证码错误",
+		})
+		return
+	}
 	// 拨号连接用户grpc服务器
 	userConn, err := grpc.Dial(fmt.Sprintf("%s:%d", global.ServerConfig.UserSrvInfo.Host, global.ServerConfig.UserSrvInfo.Port), grpc.WithInsecure())
 	if err != nil {
