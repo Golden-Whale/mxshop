@@ -55,18 +55,18 @@ func SendSms(ctx *gin.Context) {
 	}
 	// 下发
 	_, _ = sms, input
-	resp, err := sms.Send(input)
-	if err != nil {
-		zap.S().Error("短信发送错误", err)
-		return
-	}
-	if resp.StatusCode != "000000" {
-		zap.S().Debugw("发送短信失败, error msg=", resp.StatusMsg, "error code=", resp.StatusCode)
-		ctx.JSON(http.StatusInternalServerError, gin.H{
-			"msg": "短信发送失败",
-		})
-		return
-	}
+	//resp, err := sms.Send(input)
+	//if err != nil {
+	//	zap.S().Error("短信发送错误", err)
+	//	return
+	//}
+	//if resp.StatusCode != "000000" {
+	//	zap.S().Debugw("发送短信失败, error msg=", resp.StatusMsg, "error code=", resp.StatusCode)
+	//	ctx.JSON(http.StatusInternalServerError, gin.H{
+	//		"msg": "短信发送失败",
+	//	})
+	//	return
+	//}
 	// 保存 验证码
 	rdb := redis.NewClient(&redis.Options{
 		Addr: fmt.Sprintf("%s:%d", global.ServerConfig.RedisInfo.Host, global.ServerConfig.RedisInfo.Port),
