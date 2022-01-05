@@ -1,8 +1,19 @@
 name: "user-web"
 port: "8081"
+
 user_srv:
   host: "127.0.0.1"
   port: "50051"
 
 jwt:
   key: 'RfGah%kc2yuirbtO2YAWiByEtqu*No7U'
+
+rly_sms:
+  account: "8a216da87a332d53017a5688823a0f64"
+  token: "59f63148e6094f609a4cbcbd76138a56"
+  app_id: "8a216da87a332d53017a5688833a0f6a"
+
+redis:
+  host: "127.0.0.1"
+  port: "6379"
+  expire: "300"
