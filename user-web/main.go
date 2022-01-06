@@ -20,6 +20,9 @@ func main() {
 	if err := initialize.InitTrans("zh"); err != nil {
 		zap.S().Error("初始化验证器错误", err.Error())
 	}
+	// 4. 初始化srv的连接
+	initialize.InitSrvConn()
+
 	// 注册验证器
 	if v, ok := binding.Validator.Engine().(*validator.Validate); ok {
 		_ = v.RegisterValidation("mobile", myValidator.ValidateMobile)

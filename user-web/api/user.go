@@ -8,7 +8,6 @@ import (
 	"github.com/go-playground/validator/v10"
 	"github.com/go-redis/redis/v8"
 	"go.uber.org/zap"
-	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"mxshop-api/user-web/forms"
@@ -73,8 +72,6 @@ func HandelValidatorError(ctx *gin.Context, err error) {
 }
 
 func GetUserList(ctx *gin.Context) {
-	zap.S().Debug("获取用户列表页")
-
 	// 获取参数
 	pn := ctx.DefaultQuery("pn", "1")
 	pnInt, _ := strconv.Atoi(pn)
@@ -82,20 +79,12 @@ func GetUserList(ctx *gin.Context) {
 	pSize := ctx.DefaultQuery("psize", "1")
 	pSizeInt, _ := strconv.Atoi(pSize)
 
-	// 拨号连接用户grpc服务器
-	userConn, err := grpc.Dial(fmt.Sprintf("%s:%d", global.ServerConfig.UserSrvInfo.Host, global.ServerConfig.UserSrvInfo.Port), grpc.WithInsecure())
-	if err != nil {
-		zap.S().Errorw("[GetUserList] 连接 【用户服务失败】",
-			"msg", err.Error(),
-		)
-	}
 	claims, _ := ctx.Get("claims")
 	currentUser := claims.(*models.CustomClaims)
 	zap.S().Infof("访问用户：%v", currentUser.ID)
 	// 调用接口
-	userSrvClient := proto.NewUserClient(userConn)
 
-	rsp, err := userSrvClient.GetUserList(context.Background(), &proto.PageInfo{
+	rsp, err := global.UserSrvClient.GetUserList(context.Background(), &proto.PageInfo{
 		Pn:    uint32(pnInt),
 		PSize: uint32(pSizeInt),
 	})
@@ -133,25 +122,16 @@ func PasswordLogin(ctx *gin.Context) {
 		})
 		return
 	}
-	// 拨号连接用户grpc服务器
-	userConn, err := grpc.Dial(fmt.Sprintf("%s:%d", global.ServerConfig.UserSrvInfo.Host, global.ServerConfig.UserSrvInfo.Port), grpc.WithInsecure())
-	if err != nil {
-		zap.S().Errorw("[PasswordLogin] 连接 【用户服务失败】",
-			"msg", err.Error(),
-		)
-	}
-	// 调用接口
-	userSrvClient := proto.NewUserClient(userConn)
 
 	// 通过手机号码获取用户
-	rsp, err := userSrvClient.GetUserByMobile(context.Background(), &proto.MobileReqeust{Mobile: passwordForm.Mobile})
+	rsp, err := global.UserSrvClient.GetUserByMobile(context.Background(), &proto.MobileReqeust{Mobile: passwordForm.Mobile})
 	if err != nil {
 		zap.S().Errorw("[PasswordLogin] 查询 【用户手机号】失败")
 		HandelGrpcErrorToHttp(err, ctx)
 		return
 	}
 
-	passwordSame, err := userSrvClient.CheckPassword(context.Background(), &proto.PasswordCheckInfo{
+	passwordSame, err := global.UserSrvClient.CheckPassword(context.Background(), &proto.PasswordCheckInfo{
 		Password:          passwordForm.Password,
 		EncryptedPassword: rsp.Password,
 	})
@@ -209,16 +189,8 @@ func Register(ctx *gin.Context) {
 		return
 	}
 
-	// 拨号连接用户grpc服务器
-	userConn, err := grpc.Dial(fmt.Sprintf("%s:%d", global.ServerConfig.UserSrvInfo.Host, global.ServerConfig.UserSrvInfo.Port), grpc.WithInsecure())
-	if err != nil {
-		zap.S().Errorw("[Register] 连接 【用户服务失败】",
-			"msg", err.Error(),
-		)
-	}
 	// 调用接口
-	userSrvClient := proto.NewUserClient(userConn)
-	user, err := userSrvClient.CreateUser(context.Background(), &proto.CreateUserInfo{
+	user, err := global.UserSrvClient.CreateUser(context.Background(), &proto.CreateUserInfo{
 		NickName: registerForm.Mobile,
 		Password: registerForm.Password,
 		Mobile:   registerForm.Mobile,
