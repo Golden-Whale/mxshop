@@ -4,6 +4,4 @@ passlib
 grpcio
 grpcio-tools
 loguru
-
-
-
+python-consul2

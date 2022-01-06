@@ -10,11 +10,18 @@ class ReconnectMysqlDatabase(PooledMySQLDatabase, ReconnectMixin):
 
 
 MYSQL_DB = "mxshop_user_srv"
-MYSQL_HOST = "192.168.1.5"
+MYSQL_HOST = "127.0.0.1"
 MYSQL_PORT = 3306
 MYSQL_USER = "root"
 MYSQL_PASSWORD = "123456"
 
+# consul的配置
+CONSUL_HOST = "192.168.1.2"
+CONSUL_PORT = "8500"
+
+# 服务相关的配置
+SERVICE_NAME = "user-srv"
+SERVICE_TAGS = ["imooc", "bobby", "python", "srv"]
 
 DB = ReconnectMysqlDatabase(database=MYSQL_DB, host=MYSQL_HOST, port=MYSQL_PORT, user=MYSQL_USER,
                             password=MYSQL_PASSWORD)

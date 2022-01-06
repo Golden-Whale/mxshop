@@ -8,7 +8,7 @@ from user_srv.model.model import User
 from user_srv.proto import user_pb2, user_pb2_grpc
 
 
-class UserServices(user_pb2_grpc.UserServicer):
+class UserServicer(user_pb2_grpc.UserServicer):
     @staticmethod
     def convert_user_to_rsp(user) -> user_pb2.UserInfoResponse:
         # 将user的model对象转换成message对象
