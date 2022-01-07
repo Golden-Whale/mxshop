@@ -1,5 +1,6 @@
 import argparse
 import signal
+import socket
 import sys
 from concurrent import futures
 
@@ -23,6 +24,14 @@ def on_exit(signo, frame):
     sys.exit(0)
 
 
+def get_free_tcp_port():
+    tcp = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    tcp.bind(("", 0))
+    _, port = tcp.getsockname()
+    tcp.close()
+    return port
+
+
 def serve():
     parser = argparse.ArgumentParser()
     parser.add_argument('--ip',
@@ -34,10 +43,13 @@ def serve():
     parser.add_argument('--port',
                         nargs="?",
                         type=int,
-                        default=50051,
+                        default=0,
                         help="the listening port")
 
     args = parser.parse_args()
+    if args.port == 0:
+        args.port = get_free_tcp_port()
+
     # 创建一个链接
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
 
