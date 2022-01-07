@@ -31,14 +31,14 @@ func InitSrvConn() {
 		break
 	}
 	if userSrvHost == "" {
-		zap.S().Errorw("[InitSrvConn] 连接 【用户服务失败】")
+		zap.S().Fatal("[InitSrvConn] 连接 【用户服务失败】")
 		return
 	}
 
 	// 拨号连接用户grpc服务器
 	userConn, err := grpc.Dial(fmt.Sprintf("%s:%d", userSrvHost, userSrvPort), grpc.WithInsecure())
 	if err != nil {
-		zap.S().Errorw("[GetUserList] 连接 【用户服务失败】",
+		zap.S().Fatal("[GetUserList] 连接 【用户服务失败】",
 			"msg", err.Error(),
 		)
 	}

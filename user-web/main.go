@@ -5,9 +5,11 @@ import (
 	"github.com/gin-gonic/gin/binding"
 	ut "github.com/go-playground/universal-translator"
 	"github.com/go-playground/validator/v10"
+	"github.com/spf13/viper"
 	"go.uber.org/zap"
 	"mxshop-api/user-web/global"
 	"mxshop-api/user-web/initialize"
+	"mxshop-api/user-web/utils"
 	myValidator "mxshop-api/user-web/validator"
 )
 
@@ -16,12 +18,23 @@ func main() {
 	initialize.InitLogger()
 	// 2. 初始化配置文件
 	initialize.InitConfig()
-	// 3. 初始化验证器翻译
+	// 3. 初始化routers
+	router := initialize.Routers()
+	// 4. 初始化验证器翻译
 	if err := initialize.InitTrans("zh"); err != nil {
 		zap.S().Error("初始化验证器错误", err.Error())
 	}
-	// 4. 初始化srv的连接
+	// 5. 初始化srv的连接
 	initialize.InitSrvConn()
+
+	debug := viper.GetInt("MXSHOP")
+	// 如果是本地开发环境端口号固定， 线上环境获取随机端口
+	if debug == 0 {
+		port, err := utils.GetFreePort()
+		if err == nil {
+			global.ServerConfig.Port = port
+		}
+	}
 
 	// 注册验证器
 	if v, ok := binding.Validator.Engine().(*validator.Validate); ok {
@@ -33,9 +46,6 @@ func main() {
 			return t
 		})
 	}
-
-	// 2. 初始化routers
-	router := initialize.Routers()
 
 	/*
 		1. S()可以获取一个全局的sugar， 可以让我们自己设置一个全局的logger
