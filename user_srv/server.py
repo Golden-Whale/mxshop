@@ -1,8 +1,13 @@
+import sys
+import uuid
+
+sys.path.insert(0, r"/Users/he/Documents/Python/mxshop_srvs")
+
 import argparse
 import signal
 import socket
-import sys
 from concurrent import futures
+from functools import partial
 
 import grpc
 from loguru import logger
@@ -18,9 +23,10 @@ logger.add("logs/user_srv{time}.log")
 consulClient = consul.ConsulRegister(settings.CONSUL_HOST, settings.CONSUL_PORT)
 
 
-def on_exit(signo, frame):
-    logger.info("进程中断")
+def on_exit(signo, frame, service_id):
+    logger.info(f"注销 {service_id} 服务")
     consulClient.deregister(settings.SERVICE_NAME)
+    logger.info(f"注销成功")
     sys.exit(0)
 
 
@@ -61,20 +67,21 @@ def serve():
     # 开启逻辑
     server.add_insecure_port(f"{args.ip}:{args.port}")
 
+    service_id = str(uuid.uuid1())
     # 主线程退出信号监听
     """
         windows下支持的信号是有限的：
             SIGINT ctrl+c 终端
             SIGTERM kill发出的软件终止
     """
-    signal.signal(signal.SIGINT, on_exit)
-    signal.signal(signal.SIGTERM, on_exit)
+    signal.signal(signal.SIGINT, partial(on_exit, service_id=service_id))
+    signal.signal(signal.SIGTERM, partial(on_exit, service_id=service_id))
 
     logger.info(f"启动服务: {args.ip}:{args.port}")
     server.start()
 
     logger.info(f"服务注册开始")
-    consul_register_status = consulClient.register(settings.SERVICE_NAME, settings.SERVICE_NAME, args.ip, args.port,
+    consul_register_status = consulClient.register(settings.SERVICE_NAME, service_id, args.ip, args.port,
                                                    settings.SERVICE_TAGS)
     if not consul_register_status:
         logger.error("服务注册失败")
