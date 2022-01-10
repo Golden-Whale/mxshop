@@ -5,3 +5,4 @@ grpcio
 grpcio-tools
 loguru
 python-consul2
+nacos-sdk-python
