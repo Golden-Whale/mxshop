@@ -1,24 +1,8 @@
-name: "user-web"
-port: "8081"
-
-user_srv:
-  host: "192.168.1.2"
-  port: "50051"
-  name: "user-srv"
-
-jwt:
-  key: 'RfGah%kc2yuirbtO2YAWiByEtqu*No7U'
-
-rly_sms:
-  account: "8a216da87a332d53017a5688823a0f64"
-  token: "59f63148e6094f609a4cbcbd76138a56"
-  app_id: "8a216da87a332d53017a5688833a0f6a"
-
-redis:
-  host: "127.0.0.1"
-  port: "6379"
-  expire: "300"
-
-consul:
-  host: "127.0.0.1"
-  port: "8500"
+#  nacos 配置
+host: "192.168.1.2"
+port: 8848
+namespace: "65b94fdb-5ecc-48a9-950e-df24f07e6e22"
+user: "nacos"
+password: "nacos"
+data_id: "user-web.json"
+group: "dev"
